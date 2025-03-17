@@ -1,3 +1,6 @@
+const BASE_API_URL =
+  "https://my-to-887tsmko7-dhanush-kumars-projects-bf24cabb.vercel.app/api/todos";
+
 document.addEventListener("DOMContentLoaded", () => {
   fetchTodos();
 });
@@ -10,9 +13,7 @@ let allTodos = []; // Store all todos for filtering
 // Fetch and display todos
 async function fetchTodos() {
   try {
-    const response = await fetch(
-      "https://my-to-887tsmko7-dhanush-kumars-projects-bf24cabb.vercel.app/api/todos"
-    );
+    const response = await fetch(BASE_API_URL);
     allTodos = await response.json();
     console.log(allTodos);
     populateFilters();
@@ -136,12 +137,9 @@ async function deleteTodo(todoId) {
   if (!confirmDelete) return;
 
   try {
-    const response = await fetch(
-      `https://my-to-887tsmko7-dhanush-kumars-projects-bf24cabb.vercel.app/api/todos/${todoId}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch(`{BASE_API_URL}/${todoId}`, {
+      method: "DELETE",
+    });
 
     if (response.ok) {
       allTodos = allTodos.filter((todo) => todo._id !== todoId);
@@ -183,14 +181,11 @@ async function addTodo() {
   };
 
   try {
-    const response = await fetch(
-      "https://my-to-887tsmko7-dhanush-kumars-projects-bf24cabb.vercel.app/api/todos",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTodo),
-      }
-    );
+    const response = await fetch(BASE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTodo),
+    });
 
     if (response.ok) {
       fetchTodos(); // Refresh list
