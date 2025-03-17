@@ -10,7 +10,7 @@ let allTodos = []; // Store all todos for filtering
 // Fetch and display todos
 async function fetchTodos() {
   try {
-    const response = await fetch("http://localhost:3000/todos");
+    const response = await fetch("http://localhost:3000/api/todos");
     allTodos = await response.json();
     console.log(allTodos);
     populateFilters();
@@ -134,7 +134,7 @@ async function deleteTodo(todoId) {
   if (!confirmDelete) return;
 
   try {
-    const response = await fetch(`http://localhost:3000/todos/${todoId}`, {
+    const response = await fetch(`http://localhost:3000/api/todos/${todoId}`, {
       method: "DELETE",
     });
 
@@ -178,7 +178,7 @@ async function addTodo() {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/todos", {
+    const response = await fetch("http://localhost:3000/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTodo),

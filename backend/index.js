@@ -1,10 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+require("dotenv").config();
 const connectDB = require("./db");
 const cors = require("cors");
 const Todo = require("./models/Todo");
-
+const { env } = require("../client/.eslintrc.cjs");
 const corsOptions = {
   origin: process.env.APPLICATION_URL,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -18,7 +18,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // **GET method - Retrieve all todos**
-app.get("/todos", async (req, res) => {
+app.get("/api/todos", async (req, res) => {
   try {
     const todos = await Todo.find();
     res.status(200).json(todos);
@@ -28,7 +28,7 @@ app.get("/todos", async (req, res) => {
 });
 
 // **POST method - Add a new todo**
-app.post("/todos", async (req, res) => {
+app.post("/api/todos", async (req, res) => {
   try {
     const newTodo = new Todo(req.body);
     await newTodo.save();
@@ -41,7 +41,7 @@ app.post("/todos", async (req, res) => {
 });
 
 // **DELETE method - Delete a todo by ID**
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   try {
     const todo = await Todo.findByIdAndDelete(req.params.id);
     if (!todo) {
