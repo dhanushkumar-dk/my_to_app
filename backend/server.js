@@ -4,7 +4,10 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON
-app.use(cors());
+const corsOptions = {
+  origin: process.env.APPLICATION_URL,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+};
 
 const MONGO_URI =
   "mongodb+srv://admin:dhanush123@cluster0.i31li.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
