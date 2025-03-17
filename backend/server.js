@@ -1,44 +1,31 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const bodyParser = require("body-parser");
 
-const app = express();
-app.use(express.json()); // Middleware to parse JSON
+const connectDB = require("./db");
+const cors = require("cors");
+const Todo = require("./models/Todo");
+
 const corsOptions = {
   origin: process.env.APPLICATION_URL,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
 
-const MONGO_URI =
-  "mongodb+srv://admin:dhanush123@cluster0.i31li.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const app = express();
 
-mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB connected successfully!"))
-  .catch((error) => console.error("MongoDB connection error:", error));
+connectDB();
 
-// Define the Mongoose schema
-const todoSchema = new mongoose.Schema({
-  category: { type: String, required: true },
-  hostname: { type: String, required: true },
-  details: [
-    {
-      name: { type: String, required: true },
-      description: { type: String, required: true },
-      src: { type: String },
-    },
-  ],
-  status: {
-    type: String,
-    enum: ["completed", "not completed"],
-    required: true,
-  },
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+
+// **GET method - Retrieve all todos**
+app.get("/todos", async (req, res) => {
+  try {
+    const todos = await Todo.find();
+    res.status(200).json(todos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
-
-const Todo = mongoose.model("Todo", todoSchema);
 
 // **POST method - Add a new todo**
 app.post("/todos", async (req, res) => {
@@ -50,16 +37,6 @@ app.post("/todos", async (req, res) => {
       .json({ message: "Todo added successfully!", todo: newTodo });
   } catch (error) {
     res.status(400).json({ error: error.message });
-  }
-});
-
-// **GET method - Retrieve all todos**
-app.get("/todos", async (req, res) => {
-  try {
-    const todos = await Todo.find();
-    res.status(200).json(todos);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 });
 
@@ -79,7 +56,5 @@ app.delete("/todos/:id", async (req, res) => {
 });
 
 // Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
