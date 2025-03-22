@@ -3,8 +3,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const connectDB = require("./db");
 const cors = require("cors");
-const Todo = require("./models/Todo");
-const { env } = require("../client/.eslintrc.cjs");
+const Todo = require("./models/db");
 const corsOptions = {
   origin: process.env.APPLICATION_URL,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
