@@ -1,6 +1,3 @@
-const BASE_API_URL =
-  "https://render-express-deployment-ywzw.onrender.com/todos";
-
 document.addEventListener("DOMContentLoaded", () => {
   fetchTodos();
 });
@@ -13,7 +10,9 @@ let allTodos = []; // Store all todos for filtering
 // Fetch and display todos
 async function fetchTodos() {
   try {
-    const response = await fetch(BASE_API_URL);
+    const response = await fetch(
+      "https://render-express-deployment-9x32.onrender.com/todos"
+    );
     allTodos = await response.json();
     console.log(allTodos);
     populateFilters();
@@ -137,9 +136,12 @@ async function deleteTodo(todoId) {
   if (!confirmDelete) return;
 
   try {
-    const response = await fetch(`{BASE_API_URL}/${todoId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `https://render-express-deployment-9x32.onrender.com/todos/${todoId}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (response.ok) {
       allTodos = allTodos.filter((todo) => todo._id !== todoId);
@@ -181,11 +183,14 @@ async function addTodo() {
   };
 
   try {
-    const response = await fetch(BASE_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTodo),
-    });
+    const response = await fetch(
+      "https://render-express-deployment-9x32.onrender.com/todos",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTodo),
+      }
+    );
 
     if (response.ok) {
       fetchTodos(); // Refresh list
